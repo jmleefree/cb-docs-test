@@ -17,7 +17,8 @@
 
 Cloud-Barista 에서 gRPC 를 적용한 서비스로는 CB-SPIDER, CB-TUMBLEBUG, CB-DRAGONFLY 가 있다. CB-SPIDER, CB-TUMBLEBUG, CB-DRAGONFLY 서비스 기능은 계속해서 추가되고 있어 gRPC API 도 계속해서 수정 관리할 필요성이 있다. 따라서, 누구나 gRPC API를 추가할 수 있도록 가이드를 제공한다.
 
-가이드를 진행하기 위해서 신규 API를 하나 정의한다. 신규 API 는 CB-SPIDER 의 CCM(Clound Control Manager) 에 추가되는 기능으로 가정한다.
+가이드를 진행하기 위해서 신규 API를 하나 정의한다.  
+신규 API 는 CB-SPIDER 의 CCM(Clound Control Manager) 에 추가되는 기능으로 가정한다.
 
 ```
 => 신규API : 클라이언트가 보낸 데이터를 그대로 리턴하는 Echo 기능
