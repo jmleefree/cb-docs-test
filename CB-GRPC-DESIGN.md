@@ -20,25 +20,25 @@ Cloud-Barista 서비스들은 상호간에 접속하기 위해 기본으로 REST
 
 Cloud-Barista 는 REST API 단일 서비스 에서 gRPC 서비스로 확장 지원하기 위해 기존의 코드를 리팩토링하여 REST 처리 부분과 서비스 실제 업무를 처리하는 코어 로직을 분리 한다. 코어 로직으로 분리된 코드는 gRPC 처리할 때 재사용을 할 수 있고, 향후 또 다른 프로토콜을 지원할 경우 확장성을 제공할 수 있게 된다.
 
-- REST 입력 처리 패키지
-  - CB-SPIDER :
-  - CB-TUMBLEBUG :
-  - CB-DRAGONFLY :
-- gRPC 입력 처리 패키지
-  - CB-SPIDER :
-  - CB-TUMBLEBUG :
-  - CB-DRAGONFLY :
+- REST 서버 Go 파일
+  - CB-SPIDER : [github.com/cloud-barista/cb-spider/api-runtime/rest-runtime/CBSpiderRuntime.go](https://github.com/cloud-barista/cb-spider/blob/master/api-runtime/rest-runtime/CBSpiderRuntime.go)
+  - CB-TUMBLEBUG : [github.com/cloud-barista/cb-tumblebug/src/api/rest/server/server.go](https://github.com/cloud-barista/cb-tumblebug/blob/master/src/api/rest/server/server.go)
+  - CB-DRAGONFLY : [github.com/cloud-barista/cb-dragonfly/pkg/manager/apiserver.go](https://github.com/cloud-barista/cb-dragonfly/blob/feature/grpc/pkg/manager/apiserver.go)
+- gRPC 서버 Go 파일
+  - CB-SPIDER : [github.com/cloud-barista/cb-spider/api-runtime/grpc-runtime/CBSpiderGRPCRuntime.go](https://github.com/cloud-barista/cb-spider/blob/master/api-runtime/grpc-runtime/CBSpiderGRPCRuntime.go)
+  - CB-TUMBLEBUG : [github.com/cloud-barista/cb-tumblebug/src/api/grpc/server/server.go](https://github.com/cloud-barista/cb-tumblebug/blob/master/src/api/grpc/server/server.go)
+  - CB-DRAGONFLY : [github.com/cloud-barista/cb-dragonfly/pkg/api/grpc/server/server.go](https://github.com/cloud-barista/cb-dragonfly/blob/feature/grpc/pkg/api/grpc/server/server.go)
 - 코어 로직 패키지
-  - CB-SPIDER :
-  - CB-TUMBLEBUG :
-  - CB-DRAGONFLY :
+  - CB-SPIDER : [github.com/cloud-barista/cb-spider/api-runtime/common-runtime](https://github.com/cloud-barista/cb-spider/tree/master/api-runtime/common-runtime)
+  - CB-TUMBLEBUG : [github.com/cloud-barista/cb-tumblebug/src/core](https://github.com/cloud-barista/cb-tumblebug/tree/master/src/core)
+  - CB-DRAGONFLY : [github.com/cloud-barista/cb-dragonfly/pkg/core](https://github.com/cloud-barista/cb-dragonfly/tree/feature/grpc/pkg/core)
 
 Cloud-Barista 의 REST 와 gRPC 서비스를 지원하기 위해 서버를 독립적으로 실행할 경우 두개의 서버를 관리해야 하는 불편한 점을 개선하기 위해 API 통합서버를 제공한다. API 통합서버는 REST 서버와 gRPC 서버를 Goroutine 를 이용하여 동시에 실행하고, 서버 포트는 REST 와 gRPC 를 분리하여 제공하는 Dual Port 를 사용한다.
 
-- API 통합서버 패키지
-  - CB-SPIDER :
-  - CB-TUMBLEBUG :
-  - CB-DRAGONFLY :
+- API 통합서버 Go 파일
+  - CB-SPIDER : [github.com/cloud-barista/cb-spider/api-runtime/apiserver.go](https://github.com/cloud-barista/cb-spider/blob/master/api-runtime/apiserver.go)
+  - CB-TUMBLEBUG : [github.com/cloud-barista/cb-tumblebug/src/main.go](https://github.com/cloud-barista/cb-tumblebug/blob/master/src/main.go)
+  - CB-DRAGONFLY : [github.com/cloud-barista/cb-dragonfly/pkg/manager/main/main.go](https://github.com/cloud-barista/cb-dragonfly/blob/feature/grpc/pkg/manager/main/main.go)
 
 ## [gRPC 적용 구조]
 
