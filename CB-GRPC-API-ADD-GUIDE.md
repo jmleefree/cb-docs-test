@@ -20,19 +20,19 @@ Cloud-Barista 에서 gRPC 를 적용한 서비스로는 CB-SPIDER, CB-TUMBLEBUG,
 가이드를 진행하기 위해서 신규 API를 하나 정의한다. 신규 API 는 CB-SPIDER 의 CCM(Clound Control Manager) 에 추가되는 기능으로 가정한다.
 
 ```
-신규API : 클라이언트가 보낸 데이터를 그대로 리턴하는 Echo 기능
-요청메시지 : 클라이언트 이름과 메시지 정보를 가지는 JSON 문서
-{
-  clientName: "client1",
-  clientMessage: "hello"
-}
-응답메시지 : 클라이언트에게 받은 정보와 함께 서버 이름과 메시지를 잘 받았다는 내용의 JSON 문서
-{
-  serverName: "server1",
-  serverMessage: "I received your message",
-  clientName: "client1",
-  clientMessage: "hello"
-}
+=> 신규API : 클라이언트가 보낸 데이터를 그대로 리턴하는 Echo 기능
+=> 요청메시지 : 클라이언트 이름과 메시지 정보를 가지는 JSON 문서
+  {
+    clientName: "client1",
+    clientMessage: "hello"
+  }
+=> 응답메시지 : 클라이언트에게 받은 정보와 함께 서버 이름과 메시지를 잘 받았다는 내용의 JSON 문서
+  {
+    serverName: "server1",
+    serverMessage: "I received your message",
+    clientName: "client1",
+    clientMessage: "hello"
+  }
 ```
 
 사용자가 신규 API를 사용하기 위해서는 CLI(Command Line Interface) 툴을 이용하게 된다. 따라서, CLI 명령어 이름과 데이터 입력 방식을 정의해야 한다. 데이터 입력은 JSON 문서 자체로 입력할 수 도 있지만 파라미터 방식으로도 입력 가능하다. 명령어의 특성을 고려하여 한가지 방식으로 개발 가능하다. 가이드에서는 두 방식 모두 구현하는 것으로 한다.
