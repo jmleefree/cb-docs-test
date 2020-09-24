@@ -37,6 +37,7 @@ Cloud-Barista 에서 gRPC 를 적용한 서비스로는 CB-SPIDER, CB-TUMBLEBUG,
 ```
 
 사용자가 신규 API를 사용하기 위해서는 CLI(Command Line Interface) 툴을 이용하게 된다. 따라서, CLI 명령어 이름과 데이터 입력 방식을 정의해야 한다. 데이터 입력은 JSON 문서 자체로 입력할 수 도 있지만 파라미터 방식으로도 입력 가능하다. 명령어의 특성을 고려하여 한가지 방식으로 개발 가능하다. 가이드에서는 두 방식 모두 구현하는 것으로 한다.
+spider 명령어에는 -i (입력문서포맷), -o (출력문서포맷), --config (환경설정파일) 의 global parameter 가 설정되어 있어 상황에 맞게 사용할 수 있다.
 
 - echo doc CLI 명령어 (JSON 문서로 입력받는 경우)
 
