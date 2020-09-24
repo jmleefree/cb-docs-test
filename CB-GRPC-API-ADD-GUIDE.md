@@ -42,19 +42,17 @@ spider 명령어에는 -i (입력문서포맷), -o (출력문서포맷), --confi
 - echo doc CLI 명령어 (JSON 문서로 입력받는 경우)
 
   ```
-  spider echo doc -i json -o json -d
-  `
-  {
-    clientName: "client1",
-    clientMessage: "hello"
-  }
-  `
+  spider echo doc -i json -o json -d \
+  '{
+    "clientName": "client1",
+    "clientMessage": "hello"
+  }'
   ```
 
 - echo param CLI 명령어 (파라미터로 입력받는 경우)
 
   ```
-  spider echo param -o json --clientName client1 --clientMessage "hello"
+  spider echo param -o json --clientName "client1" --clientMessage "hello"
   ```
 
 ## [ProtoBuf IDL 작성]
