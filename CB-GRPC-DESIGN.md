@@ -1,12 +1,17 @@
-# Cloud-Barista gRPC 기반 Go API 설계서
+# Cloud-Barista gRPC 기반 Go API 주요 설계
 
 ## [목 차]
 
-1. [gRPC 확장 지원](#gRPC-확장-지원)
-2. [gRPC 적용 구조](#gRPC-적용-구조)
-3. [gRPC 설정 파일](#gRPC-설정-파일)
+1. [개요](#개요)
+2. [gRPC 확장 지원](#gRPC-확장-지원)
+3. [gRPC 적용 구조](#gRPC-적용-구조)
+4. [gRPC 설정 파일](#gRPC-설정-파일)
 
 ---
+
+## [개요]
+
+Cloud-Barista 서비스 중에서 CB-SPIDER, CB-TUMBLEBUG, CB-DRAGONFLY 에 새롭게 추가된 gRPC 프로토콜을 소개하고, REST API 와 통합 지원하기 위해 변경된 내용과 Cloud-Barista 서비스에 gRPC 가 어떻게 적용되었는지 주요 설계 내용을 기술한다.
 
 ## [gRPC 확장 지원]
 

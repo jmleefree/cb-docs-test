@@ -2,20 +2,24 @@
 
 ## [목 차]
 
-1. [신규 API 정의](#신규-API-정의)
-2. [ProtoBuf IDL 작성](#ProtoBuf-IDL-작성)
-3. [ProtoBuf 컴파일](#ProtoBuf-컴파일)
-4. [코어 로직 구현](#코어-로직-구현)
-5. [gRPC 서버 구현](#gRPC-서버-구현)
-6. [gRPC 클라이언트 구현](#gRPC-클라이언트-구현)
-7. [gRPC Go API구현](#gRPC-Go-API구현)
-8. [CLI 구현](#CLI-구현)
+1. [개요](#개요)
+2. [신규 API 정의](#신규-API-정의)
+3. [ProtoBuf IDL 작성](#ProtoBuf-IDL-작성)
+4. [ProtoBuf 컴파일](#ProtoBuf-컴파일)
+5. [코어 로직 구현](#코어-로직-구현)
+6. [gRPC 서버 구현](#gRPC-서버-구현)
+7. [gRPC 클라이언트 구현](#gRPC-클라이언트-구현)
+8. [gRPC Go API구현](#gRPC-Go-API구현)
+9. [CLI 구현](#CLI-구현)
 
 ---
 
-## [신규 API 정의]
+## [개요]
 
-Cloud-Barista 에서 gRPC 를 적용한 서비스로는 CB-SPIDER, CB-TUMBLEBUG, CB-DRAGONFLY 가 있다. CB-SPIDER, CB-TUMBLEBUG, CB-DRAGONFLY 서비스 기능은 계속해서 추가되고 있어 gRPC API 도 계속해서 수정 관리할 필요성이 있다. 따라서, 누구나 gRPC API를 추가할 수 있도록 가이드를 제공한다.
+Cloud-Barista 에서 gRPC 를 적용한 서비스로는 CB-SPIDER, CB-TUMBLEBUG, CB-DRAGONFLY 가 있다. CB-SPIDER, CB-TUMBLEBUG, CB-DRAGONFLY 서비스 기능은 계속해서 추가되고 있어 gRPC API 도 계속해서 수정 관리할 필요성이 있다. 따라서, 누구나 gRPC API를 추가할 수 있도록 가이드를 제공한다.  
+본 가이드에서는 신규 API를 가상으로 정의하는 것 부터 시작하여 ProtoBuf IDL 작성, 코어 로직 구현, gRPC 서버/클라이언트 구현, Go API 구현, CLI 구현까지 전체 과정을 상세히 소개한다.
+
+## [신규 API 정의]
 
 가이드를 진행하기 위해서 신규 API를 하나 정의한다.  
 신규 API 는 CB-SPIDER 의 CCM(Clound Control Manager) 에 추가되는 기능으로 가정한다.
