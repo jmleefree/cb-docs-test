@@ -159,7 +159,7 @@ func CoreEcho(reqInfo EchoInfo) (*EchoResult, error) {
 
 ## [gRPC 서버 구현]
 
-CB-SPIDER 의 gRPC 서버는 [CBSpiderGRPCRuntime.go](https://github.com/cloud-barista/cb-spider/blob/master/api-runtime/grpc-runtime/CBSpiderGRPCRuntime.go) 파일에서 구현되어 있다. ProtoBuf IDL 에서 정의한 service CCM{} 은 실제 구현 내용은 존재하지 않는다. 사용자가 실제 구현내용을 ProboBuf 에 등록해줘야 한다. CCM(Clound Control Manager) 관련 서비스를 제공하기 위해 실제 구현 내용은 [CCMService](https://github.com/cloud-barista/cb-spider/blob/master/api-runtime/grpc-runtime/service/service.go) 구조체 에서 메쏘드를 정의하고 있으며, CCMService{} 를 RegisterCCMServer() 함수를 이용하여 ProtoBuf 에 등록하게 된다.
+CB-SPIDER 의 gRPC 서버는 [CBSpiderGRPCRuntime.go](https://github.com/cloud-barista/cb-spider/blob/master/api-runtime/grpc-runtime/CBSpiderGRPCRuntime.go) 파일에서 구현되어 있다. ProtoBuf IDL 에서 정의한 service CCM{} 의 실제 구현 내용은 존재하지 않는다. 사용자가 실제 구현내용을 ProboBuf 에 등록해줘야 한다. CCM(Clound Control Manager) 관련 서비스를 제공하기 위해 실제 구현 내용은 [CCMService](https://github.com/cloud-barista/cb-spider/blob/master/api-runtime/grpc-runtime/service/service.go) 구조체 에서 메쏘드를 정의하고 있으며, CCMService{} 를 RegisterCCMServer() 함수를 이용하여 ProtoBuf 에 등록하게 된다.
 
 ```
 pb.RegisterCCMServer(gs, &grpc_service.CCMService{})
@@ -293,7 +293,7 @@ EchoByParam() 처럼 파라미터 방식의 API 는 내부적으로 JSON 문서�
 
 ## [CLI 구현]
 
-Cloud-Barista 에서 CLI(Command Line Interface)를 개발하기 위해 [cobra](https://github.com/spf13/cobra) 라이브러리를 이용한다. 신규 API 에서 제공하는 명령어는 `echo doc` 과 `echo param` 로 정의하였고, 명령어를 추가하기 위해서는 Cobra 를 이용한다. [cmd](https://github.com/cloud-barista/cb-spider/tree/master/interface/cli/spider/cmd) 폴더에 echo.go 파일을 생성하여 다음 코드를 복사한다.
+Cloud-Barista 에서 CLI(Command Line Interface)를 개발하기 위해 [cobra](https://github.com/spf13/cobra) 라이브러리를 이용한다. 신규 API 에서 제공하는 명령어는 `echo doc` 과 `echo param` 로 정의하였고, 명령어를 추가하기 위해서는 cobra 를 이용한다. [cmd](https://github.com/cloud-barista/cb-spider/tree/master/interface/cli/spider/cmd) 폴더에 echo.go 파일을 생성하여 다음 코드를 복사한다.
 
 ```
 package cmd
