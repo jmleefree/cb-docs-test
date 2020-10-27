@@ -4,7 +4,7 @@
 
 1. [개요](#개요)
 2. [신규 API 정의](#신규-API-정의)
-3. [ProtoBuf IDL 작성](#ProtoBuf-IDL-작성-/-①-단계)
+3. [ProtoBuf IDL 작성](#ProtoBuf-IDL-작성-/-1-단계)
 4. [ProtoBuf 컴파일](#ProtoBuf-컴파일-/-②-단계)
 5. [코어 로직 구현](#코어-로직-구현-/-③-단계)
 6. [gRPC 서버 구현](#gRPC-서버-구현-/-④-단계)
@@ -70,7 +70,7 @@ spider 명령어에는 -i (입력문서포맷), -o (출력문서포맷), --confi
 $ source setup.env
 ```
 
-## [ProtoBuf IDL 작성 / ① 단계]
+## [ProtoBuf IDL 작성 / 1 단계]
 
 [cbspider.proto](https://github.com/cloud-barista/cb-spider/blob/master/api-runtime/grpc-runtime/idl/cbspider/cbspider.proto) 파일에서 CCM 서비스 부분에 Echo 메쏘드를 복사하여 추가한다. 그리고, EchoRequest 와 EchoResponse 메시지도 복사해서 추가한다.  
 ProtoBuf IDL을 작성할 때는 [스타일가이드](https://developers.google.com/protocol-buffers/docs/style)와 [문법](https://developers.google.com/protocol-buffers/docs/proto3)을 먼저 확인하고 작성한다.
