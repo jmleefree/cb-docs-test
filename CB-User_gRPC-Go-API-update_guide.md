@@ -18,7 +18,7 @@
 ## [개요]
 
 Cloud-Barista 에서 gRPC 를 적용한 서비스로는 CB-Spider, CB-Tumblebug, CB-Dragonfly 가 있다. CB-Spider, CB-Tumblebug, CB-Dragonfly 서비스 기능은 계속해서 추가되고 있어 gRPC API 도 계속해서 수정 관리할 필요성이 있다. 따라서, 누구나 gRPC API를 추가할 수 있도록 가이드를 제공한다.  
-본 가이드에서는 신규 API를 가상으로 정의하는 것 부터 시작하여 다음 그림처럼 단계별로 ProtoBuf IDL 작성 및 컴파일, 코어 로직 구현, gRPC 서버/클라이언트 구현, Go API 구현, CLI 구현까지 전체 과정을 상세히 소개한다.
+본 가이드에서는 CB-Spider 신규 API를 가상으로 정의하는 것 부터 시작하여 다음 그림처럼 단계별로 ProtoBuf IDL 작성 및 컴파일, 코어 로직 구현, gRPC 서버/클라이언트 구현, Go API 구현, CLI 구현까지 전체 과정을 상세히 소개한다.
 
 <br/>
 <img src="./images/grpc-api-update-guide.png" width="1000">
