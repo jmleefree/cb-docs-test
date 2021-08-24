@@ -18,6 +18,7 @@
 - [REPORTS Workflow 수정](#REPORTS-Workflow-구축)
 - [Workflow Job 추가](#Workflow-Job-추가)
 - [Unit Test 시나리오 추가](#Unit-Test-시나리오-추가)
+- [Unit Test 시나리오 수정](#Unit-Test-시나리오-수정)
 
 ## 1. 개요
 
@@ -683,3 +684,155 @@ func TestCloudOS(t *testing.T) {
   })
 }
 ```
+
+## [Unit Test 시나리오 수정]
+
+Unit Test 기존 시나리오를 수정하고자 할 경우 다음을 참고한다.
+
+### (1) REST API
+
+- 함수 이름이 변경된 경우
+
+  다음처럼 Echo 핸들러 함수 ListCloudOS 가 ListOSName 으로 변경된다고 가정하자.
+
+  ```
+  {"GET", "/cloudos", ListCloudOS},  =>  {"GET", "/cloudos", ListOSName},
+  ```
+
+  [echo_call.go](https://github.com/cloud-barista/poc-cicd-spider/blob/master/test/interface-test/rest-scenario/echo_call.go) 파일에서 다음처럼 Reflection 을 이용하기 위해 함수를 map 으로 구성하는 부분이 존재한다. 여기에서 변경된 함수이름으로 수정한다.
+
+  ```
+  var funcs = map[string]interface{}{
+  "ListOSName":            restruntime.ListOSName, // ListCloudOS 를 ListOSName 로 수정
+  "EndpointInfo":           restruntime.EndpointInfo,
+  "RegisterCloudDriver":    restruntime.RegisterCloudDriver,
+  "ListCloudDriver":        restruntime.ListCloudDriver,
+  ```
+
+  REST API 시나리오의 TestCase 에서 다음처럼 EchoFunc 필드에 "ListCloudOS" 로 되어 있는 함수이름을 "ListOSName" 로 수정한다.
+
+  ```
+  tc := TestCases{
+      Name:                 "list cloud os",
+      EchoFunc:             "ListOSName", // ListCloudOS 를 ListOSName 로 수정
+      ...
+    }
+  ```
+
+- HTTP 호출 방식이 변경된 경우
+
+  다음은 http://localhost:1024/spider/controlvm/vm-01?action=reboot URL 을 GET 방식으로 호출하는 ControlVM 을 테스트하는 예제이다. 또한, POST 데이터로 "ConnectionName" 를 json 으로 포함하고 있다. HTTP 호출 방식이 변경되는 경우 관계된 필드 HttpMethod / WhenURL / GivenQueryParams / GivenParaNames / GivenParaVals / GivenPostData 를 수정하면 된다.
+
+  ```
+  tc = TestCases{
+  		Name:                 "reboot vm",
+  		EchoFunc:             "ControlVM",
+  		HttpMethod:           http.MethodGet, // HTTP 메쏘드가 변경된 경우 수정
+  		WhenURL:              "/spider/controlvm/:Name", // URL 이 변경된 경우 수정
+  		GivenQueryParams:     "?action=reboot", // Query Parameter 가 변경된 경우 수정
+  		GivenParaNames:       []string{"Name"}, // Pass Parameter 이름이 변경된 경우 수정
+  		GivenParaVals:        []string{"vm-01"}, // Pass Parameter 값이 변경된 경우 수정
+  		GivenPostData:        `{ "ConnectionName": "mock-unit-config01" }`, // POST 데이터가 변경된 경우 수정
+  		ExpectStatus:         http.StatusOK,
+  		ExpectBodyStartsWith: `{"Status":"Rebooting"}`,
+  	}
+  ```
+
+  예로, Query Parameter 를 Pass Parameter 로 옮기고 HTTP 메쏘드는 POST 방식으로 변경한다고 가정하자. 즉, http://localhost:1024/spider/controlvm/vm-01/reboot URL 을 POST 방식으로 호출한다고 하면 다음과 같이 수정하면 된다.
+
+  ```
+  tc = TestCases{
+  		Name:                 "reboot vm",
+  		EchoFunc:             "ControlVM",
+  		HttpMethod:           http.MethodPost, // Post 메쏘드로 수정
+  		WhenURL:              "/spider/controlvm/:Name/:Action", // URL에 :Action 추가
+  		GivenQueryParams:     "", // Query Parameter 없앰
+  		GivenParaNames:       []string{"Name", "Action"}, // "Action" 추가
+  		GivenParaVals:        []string{"vm-01", "reboot"}, // "reboot" 추가
+  		GivenPostData:        `{ "ConnectionName": "mock-unit-config01" }`, // 수정 사항 없음
+  		ExpectStatus:         http.StatusOK,
+  		ExpectBodyStartsWith: `{"Status":"Rebooting"}`,
+  	}
+  ```
+
+- 함수 결과가 변경된 경우
+
+  다음은 "ListVM" 을 테스트하는 예제이다. 만약, "ListVM" 함수의 수정으로 인해 결과가 수정되면 TestCase 는 FAIL 이 발생하게 된다. 이럴경우, ExpectBodyStartsWith 필드에 지정된 문자열이 결과값과 일치하지 않는 경우이다. ExpectBodyStartsWith 필드 값이 사용자가 직접 수정할 수 도 있지만, 그 대신 ExpectBodyStartsWith 필드를 공백으로 놓고 테스트를 다시 실행하면 에러가 발생하고 에러 메시지에 실제 결과값을 보여준다. 출력된 실제 결과값을 복사하여 ExpectBodyStartsWith 필드에 적용하면 쉽게 변경할 수 있게 된다.
+
+  ```
+  tc = TestCases{
+  		Name:                 "list vm",
+  		EchoFunc:             "ListVM",
+  		HttpMethod:           http.MethodGet,
+  		WhenURL:              "/spider/vm",
+  		GivenQueryParams:     "",
+  		GivenParaNames:       nil,
+  		GivenParaVals:        nil,
+  		GivenPostData:        `{ "ConnectionName": "mock-unit-config01" }`,
+  		ExpectStatus:         http.StatusOK,
+  		ExpectBodyStartsWith: "", // 공백으로 놓고 시나리오 다시 실행
+  	}
+  ```
+
+- 함수 결과를 이용하고자 하는 경우
+
+  TestCase 를 작성하고 EchoTest() 함수를 호출하면 보통 하나의 TestCase 가 완료된다. 하지만, TestCase 의 결과를 다시 다음 TestCase 에서 이용하는 경우가 존재할 수 있다. 예로, CB-LADYBUG 에서 Node 를 생성하는 경우 Node ID 가 랜덤하게 생성하게 된다. 이어서 GetNode 를 테스트하는 경우 ID 가 필요하게 되는데 이 경우 Node ID 를 알기 위해 TestCase 결과가 필요하게 된다.
+
+  ```
+  tc = TestCases{
+    Name:                 "list node",
+    EchoFunc:             "ListNode",
+    HttpMethod:           http.MethodGet,
+    WhenURL:              "/ladybug/ns/:namespace/clusters/:cluster/nodes",
+    GivenQueryParams:     "",
+    GivenParaNames:       []string{"namespace", "cluster"},
+    GivenParaVals:        []string{"ns-unit-01", "cb-cluster"},
+    GivenPostData:        "",
+    ExpectStatus:         http.StatusOK,
+    ExpectBodyStartsWith: `{"kind":"NodeList","items":[`,
+  }
+  res, err := EchoTest(t, tc) // TestCase 결과를 받아옴
+  nodeName := "undefined"
+  if err == nil {
+    nodeList := make(map[string]interface{})
+    err = json.Unmarshal([]byte(res), &nodeList)
+    if err == nil {
+      for _, m := range nodeList["items"].([]interface{}) {
+        nodeInfo := m.(map[string]interface{})
+        nodeName = fmt.Sprintf("%v", nodeInfo["name"]) // TestCase 결과에서 nodeName 추출
+      }
+    }
+  }
+
+  tc = TestCases{
+    Name:                 "get node",
+    EchoFunc:             "GetNode",
+    HttpMethod:           http.MethodGet,
+    WhenURL:              "/ladybug/ns/:namespace/clusters/:cluster/nodes/:node",
+    GivenQueryParams:     "",
+    GivenParaNames:       []string{"namespace", "cluster", "node"},
+    GivenParaVals:        []string{"ns-unit-01", "cb-cluster", nodeName}, // GetNode 테스트할 때 nodeName 이용
+    GivenPostData:        "",
+    ExpectStatus:         http.StatusOK,
+    ExpectBodyStartsWith: `{"name":"` + nodeName + `","kind":"Node"`,
+  }
+  EchoTest(t, tc)
+  ```
+
+### (2) GO API
+
+- 함수 이름이 변경된 경우
+- 함수 파라미터가 변경된 경우
+- 함수 결과가 변경된 경우
+- 함수 결과를 이용하고자 하는 경우
+
+### (3) CLI
+
+- 명령어 이름이 변경된 경우
+- 명령어 옵션이 변경된 경우
+- 명령어 결과가 변경된 경우
+- 명령어 결과를 이용하고자 하는 경우
+
+### (4) 런타임 함수 변경
+
+Cloud-Barista 프레임워크에는 외부 시스템과 연동되는 부분이 존재한다. 그래서, 외부 시스템과 연동되어 실행되는 시나리오를 실행할 때면, 항시 외부 시스템이 실행되는 상태를 유지해야 하는 제약사항이 존재하게 된다. 이럴 경우, 외부 시스템에 연동되는 함수를 [Go Monkey](https://github.com/bouk/monkey) 를 이용하여 시나리오가 실행할 때 함수를 사용자가 재정의 하여 외부 시스템과의 연동 부분을 가상으로 시뮬레이션 할 수 있다.
