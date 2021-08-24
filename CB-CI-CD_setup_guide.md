@@ -188,7 +188,7 @@ poc-cicd-spider 에서 복사한 cb-ci-actions.yaml 파일을 CB-SPIDER Reposito
 
 ### (1) skip_tags 변수 활용
 
-skip_tags 변수는 CB-ENV-JOB 의 outputs 항목에 정의되어 있어 다른 Job 에서 접근 가능하게 설정되어 있어 Workflow Job 들의 실행 여부를 제어하는데 활용될 수 있다.
+skip_tags 변수는 CB-ENV-JOB 의 outputs 항목에 정의되어 있어 다른 Job 에서 접근 가능하고, Workflow Job 들의 실행 여부를 제어하는데 활용될 수 있다.
 
 ```
 cb-env-job:
@@ -197,7 +197,7 @@ cb-env-job:
     skip_tags: ${{ steps.cev.outputs.steps.cev.outputs.skip_tags }}
 ```
 
-예로 CB-CI-SHOSTED-JOB / CB-CI-TEST-JOB / CB-CI-IMAGE-BUILD-JOB 의 실행여부를 제어해보자.
+예로, CB-CI-SHOSTED-JOB / CB-CI-TEST-JOB / CB-CI-IMAGE-BUILD-JOB 의 실행여부를 제어해보자.
 먼저, 사용자는 각 Job 의 제어를 위해 정보를 지정해야 하는데 PR 메시지나 Commit 메시지에 대괄호[] 를 사용하여 지정할 수 있다.
 
 - [skip shosted] : 메시지에 [skip shosted] 가 포함되면 CB-CI-SHOSTED-JOB 을 실행하지 않는데 활용
@@ -223,7 +223,7 @@ cb-ci-image-build-job:
   if: ${{ github.repository_owner == 'cloud-barista' && !contains(needs.cb-env-job.outputs.skip_tags, '[skip image build]') }}
 ```
 
-skip_tags 변수외에 author_association / branch 변수를 사용할 수 있으나 현재 주석처리 되어 있다. 주석을 제거하고 사용할 수 있으며 사용법은 skip_tags 와 유사하게 다음처럼 사용가능하다.
+skip_tags 변수 외에 author_association / branch 변수를 사용할 수 있으나 현재 주석처리 되어 있다. 주석을 제거하고 사용할 수 있으며 사용법은 skip_tags 와 유사하게 다음처럼 사용가능하다.
 
 ```
 cb-ci-shosted-job:
@@ -234,7 +234,7 @@ cb-ci-shosted-job:
 
 ### (2) Lint 수정
 
-현재 Cloud-Barista 에서는 deadcode / errcheck / staticcheck / revive / gofmt / govet / gocyclo / golint / ineffassign / misspell 을 제공한다. 여기에서 deadcode 를 삭제하고자 한다. 다른 Lint 를 추가하고자 할 경우에는 삭제 단계를 참고하여 진행한다.
+현재 Cloud-Barista 에서는 deadcode / errcheck / staticcheck / revive / gofmt / govet / gocyclo / golint / ineffassign / misspell 을 제공한다. 여기에서는 deadcode 를 삭제하는 예를 설명한다. 다른 Lint 를 추가하고자 할 경우에는 삭제 단계를 참고하여 진행한다.
 
 - "Run Lint" Step 에서 다음의 deadcode 를 실행하는 라인 삭제
 
@@ -334,12 +334,12 @@ cb-ci-shosted-job:
 
 - cb-spider-dashboard Repository 의 index.html 에서 다음의 details tabIndex 전체 수정
 
-  아래처럼 Dashboard 정보는 details 를 클릭하면 세부 정보를 보여주는 탭으로 이동하게 된다. 이때에 tabIndex 를 사용하게 되는데, deadcode 가 삭제되어서 tabIndex 가 전체적으로 변하게 되어 모든 @click="tabIndex=0" 부분을 맞게 수정해야 한다.
+  아래처럼 Dashboard 정보는 details 를 클릭하면 세부 정보를 보여주는 탭으로 이동하게 된다. 이때에 tabIndex 를 사용하게 되는데, deadcode 가 삭제되어서 tabIndex 가 전체적으로 변하게 되어 모든 @click="tabIndex=" 부분을 맞게 수정해야 한다.
 
   ```
   <p class="mt-3 mb-0 text-muted text-sm-right">
       <span class="text-success mr-2"></span>
-    <span class="text-sm"><a href="#details" @click="tabIndex=0">details</a></span>
+    <span class="text-sm"><a href="#details" @click="tabIndex=인덱스수정해야함">details</a></span>
   </p>
   ```
 
@@ -355,7 +355,7 @@ CB-SPIDER Repository 에서 Unit Test 시나리오는 test/interface-test 에 �
 export CBSPIDER_ROOT=$HOME/go/src/github.com/cloud-barista/cb-spider/unit-test
 ```
 
-- unit-test/test.sh 에서 go test 의 coverpkg 옵션에서 "go list ../../..." 를 "go list ../..." 로 수정하고, "grep -v cloud-driver" 를 다음과 같이 추가한다.
+- unit-test/test.sh 에서 go test 의 coverpkg 옵션에서 "go list ../../..." 를 "go list ../..." 로 수정하고, "grep -v cloud-driver" 를 다음과 같이 추가한다. test/interface-test 일 때는 cb-spider ROOT 까지 상대 경로로 ../../ 를 해야 하지만, unit-test 일 때는 ROOT 까지 ../ 를 하면 되게 된다.
 
 ```
 go test -p 1  -v -coverpkg=$(go list ../... | grep -v interface-test  | grep -v protobuf | grep -v cloud-driver | tr "\n" ",")  -coverprofile=profile.cov ./...

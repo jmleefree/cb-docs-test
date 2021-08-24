@@ -184,7 +184,7 @@ CI Workflow 는 가장 먼저 ENV JOB 이 실행된다. 다른 Job 들은 ENV JO
 
 #### 3.1.1. ENV JOB
 
-ENV JOB은 Workflow에 필요한 skip_tags 환경 변수 설정 작업 수행하며, branch / author_association 환경 변수는 주석 처리되어 있다. 다음은 ENV JOB 전체 구조를 보여준다.
+ENV JOB은 Workflow에 필요한 skip_tags 환경 변수 설정 작업을 수행하며, branch / author_association 환경 변수는 주석 처리되어 있다. 다음은 ENV JOB 전체 구조를 보여준다.
 
 ```
   cb-env-job:
@@ -287,7 +287,7 @@ TEST JOB 은 다음 Step 들로 구성되어 있으며 순차적으로 실행된
   본 Step 은 Unit Test 시나리오를 실행하고 소스코드의 커버리지를 구하는 일을 수행한다. 다음은 Cloud-Barista 의 Unit Test 구조를 보여준다. Unit Test 는 입력과 출력을 기준으로 블랙박스 테스트를 기본으로 하고 있으며, REST API / Go API / CLI 인터페이스를 테스트한다. Unit Test 시나리오마다 테스트 환경을 새롭게 구성하고 있고, port / meta_db 등은 충돌 방지를 위해 Unit Test 에서 별도로 사용 가능하게 구성한다.
 
   <br/>
-  <img src="./images/unit-test.png" >
+  <img src="./images/unit-test.png" width="500">
   <br/><br/>
 
   예로, CB-SPIDER 의 Unit Test 시나리오는 poc-cicd-spier 의 [test/interface-test](https://github.com/cloud-barista/poc-cicd-spider/tree/master/test/interface-test) 에 구현되어 있으며 다음과 같은 소스트리를 보여준다.
@@ -610,7 +610,7 @@ IMAGE DEPLOY JOB 은 다음 Step 들로 구성되어 있으며 순차적으로 �
 
 - Login to GitHub Container Registry
 
-  docker/login-action@v1 를 이용하여 GitHub Container Registry 에 로그인한다. Secrets 변수CR_PAT 가 설정되어 있어야 한다.
+  docker/login-action@v1 를 이용하여 GitHub Container Registry 에 로그인한다. Secrets 변수 CR_PAT 가 설정되어 있어야 한다.
 
 - Build and publish
 
@@ -914,7 +914,7 @@ Cloud-Barista CI/CD 의 Dashboard 화면은 크게 Title / Summary / Details 의
 
 Dashboard Repository는 다음과 같이 index.html 과 cb-publish 폴더로 구성된다. index.html 은 Dashboard를 구현한 파일이고 cb-publish는 index.html 에서 CI/CD 결과를 표시하기 위해 필요한 데이터를 저장한 json / html 파일들이 저장된다.
 <br/>
-<img src="./images/dashboard-folder.png" >
+<img src="./images/dashboard-folder.png" width="500px">
 <br/><br/>
 
 Dashboard Application 인 index.html 을 호출하기 위해서는 Github Pages 서버스를 이용하게 되는데 호출 예로 다음과 같이 URL 을 사용할 수 있다. index.html 에는 info 파라미터가 존재하는데 info 파라미터에 Dashboard 에 정보를 표시할 json 파일 위치를 지정하게 된다.
