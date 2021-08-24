@@ -287,7 +287,7 @@ TEST JOB 은 다음 Step 들로 구성되어 있으며 순차적으로 실행된
   본 Step 은 Unit Test 시나리오를 실행하고 소스코드의 커버리지를 구하는 일을 수행한다. 다음은 Cloud-Barista 의 Unit Test 구조를 보여준다. Unit Test 는 입력과 출력을 기준으로 블랙박스 테스트를 기본으로 하고 있으며, REST API / Go API / CLI 인터페이스를 테스트한다. Unit Test 시나리오마다 테스트 환경을 새롭게 구성하고 있고, port / meta_db 등은 충돌 방지를 위해 Unit Test 에서 별도로 사용 가능하게 구성한다.
 
   <br/>
-  <img src="./images/unit-test.png" width="500">
+  <img src="./images/unit-test.png" width="700">
   <br/><br/>
 
   예로, CB-SPIDER 의 Unit Test 시나리오는 poc-cicd-spier 의 [test/interface-test](https://github.com/cloud-barista/poc-cicd-spider/tree/master/test/interface-test) 에 구현되어 있으며 다음과 같은 소스트리를 보여준다.
