@@ -732,10 +732,10 @@ Unit Test 기존 시나리오를 수정하고자 할 경우 다음을 참고한�
 
   ```
   tc := TestCases{
-      Name:                 "list cloud os",
-      EchoFunc:             "ListOSName", // ListCloudOS 를 ListOSName 로 수정
-      ...
-    }
+    Name:                 "list cloud os",
+    EchoFunc:             "ListOSName", // ListCloudOS 를 ListOSName 로 수정
+    ...
+  }
   ```
 
 - HTTP 호출 방식이 변경된 경우
@@ -744,34 +744,34 @@ Unit Test 기존 시나리오를 수정하고자 할 경우 다음을 참고한�
 
   ```
   tc = TestCases{
-  		Name:                 "reboot vm",
-  		EchoFunc:             "ControlVM",
-  		HttpMethod:           http.MethodGet, // HTTP 메쏘드가 변경된 경우 수정
-  		WhenURL:              "/spider/controlvm/:Name", // URL 이 변경된 경우 수정
-  		GivenQueryParams:     "?action=reboot", // Query Parameter 가 변경된 경우 수정
-  		GivenParaNames:       []string{"Name"}, // Path Parameter 이름이 변경된 경우 수정
-  		GivenParaVals:        []string{"vm-01"}, // Path Parameter 값이 변경된 경우 수정
-  		GivenPostData:        `{ "ConnectionName": "mock-unit-config01" }`, // POST 데이터가 변경된 경우 수정
-  		ExpectStatus:         http.StatusOK,
-  		ExpectBodyStartsWith: `{"Status":"Rebooting"}`,
-  	}
+    Name:                 "reboot vm",
+    EchoFunc:             "ControlVM",
+    HttpMethod:           http.MethodGet, // HTTP 메쏘드가 변경된 경우 수정
+    WhenURL:              "/spider/controlvm/:Name", // URL 이 변경된 경우 수정
+    GivenQueryParams:     "?action=reboot", // Query Parameter 가 변경된 경우 수정
+    GivenParaNames:       []string{"Name"}, // Path Parameter 이름이 변경된 경우 수정
+    GivenParaVals:        []string{"vm-01"}, // Path Parameter 값이 변경된 경우 수정
+    GivenPostData:        `{ "ConnectionName": "mock-unit-config01" }`, // POST 데이터가 변경된 경우 수정
+    ExpectStatus:         http.StatusOK,
+    ExpectBodyStartsWith: `{"Status":"Rebooting"}`,
+  }
   ```
 
   예로, Query Parameter 를 Path Parameter 로 옮기고 HTTP 메쏘드는 POST 방식으로 변경한다고 가정하자. 즉, http://localhost:1024/spider/controlvm/vm-01/reboot URL 을 POST 방식으로 호출한다고 하면 다음과 같이 수정하면 된다.
 
   ```
   tc = TestCases{
-  		Name:                 "reboot vm",
-  		EchoFunc:             "ControlVM",
-  		HttpMethod:           http.MethodPost, // Post 메쏘드로 수정
-  		WhenURL:              "/spider/controlvm/:Name/:Action", // URL에 :Action 추가
-  		GivenQueryParams:     "", // Query Parameter 없앰
-  		GivenParaNames:       []string{"Name", "Action"}, // "Action" 추가
-  		GivenParaVals:        []string{"vm-01", "reboot"}, // "reboot" 추가
-  		GivenPostData:        `{ "ConnectionName": "mock-unit-config01" }`, // 수정 사항 없음
-  		ExpectStatus:         http.StatusOK,
-  		ExpectBodyStartsWith: `{"Status":"Rebooting"}`,
-  	}
+    Name:                 "reboot vm",
+    EchoFunc:             "ControlVM",
+    HttpMethod:           http.MethodPost, // Post 메쏘드로 수정
+    WhenURL:              "/spider/controlvm/:Name/:Action", // URL에 :Action 추가
+    GivenQueryParams:     "", // Query Parameter 없앰
+    GivenParaNames:       []string{"Name", "Action"}, // "Action" 추가
+    GivenParaVals:        []string{"vm-01", "reboot"}, // "reboot" 추가
+    GivenPostData:        `{ "ConnectionName": "mock-unit-config01" }`, // 수정 사항 없음
+    ExpectStatus:         http.StatusOK,
+    ExpectBodyStartsWith: `{"Status":"Rebooting"}`,
+  }
   ```
 
 - 함수 결과가 변경된 경우
@@ -780,17 +780,17 @@ Unit Test 기존 시나리오를 수정하고자 할 경우 다음을 참고한�
 
   ```
   tc = TestCases{
-  		Name:                 "list vm",
-  		EchoFunc:             "ListVM",
-  		HttpMethod:           http.MethodGet,
-  		WhenURL:              "/spider/vm",
-  		GivenQueryParams:     "",
-  		GivenParaNames:       nil,
-  		GivenParaVals:        nil,
-  		GivenPostData:        `{ "ConnectionName": "mock-unit-config01" }`,
-  		ExpectStatus:         http.StatusOK,
-  		ExpectBodyStartsWith: "", // 공백으로 놓고 시나리오 다시 실행
-  	}
+    Name:                 "list vm",
+    EchoFunc:             "ListVM",
+    HttpMethod:           http.MethodGet,
+    WhenURL:              "/spider/vm",
+    GivenQueryParams:     "",
+    GivenParaNames:       nil,
+    GivenParaVals:        nil,
+    GivenPostData:        `{ "ConnectionName": "mock-unit-config01" }`,
+    ExpectStatus:         http.StatusOK,
+    ExpectBodyStartsWith: "", // 공백으로 놓고 시나리오 다시 실행
+  }
   ```
 
 - 함수 결과를 이용하고자 하는 경우
@@ -853,11 +853,11 @@ Unit Test 기존 시나리오를 수정하고자 할 경우 다음을 참고한�
 
   ```
   tc := TestCases{
-  		Name:                "list cloud os",
-  		Instance:            CimApi,
-  		Method:              "ListOSName", // ListCloudOS 를 ListOSName 로 수정
-      ...
-  	}
+    Name:                "list cloud os",
+    Instance:            CimApi,
+    Method:              "ListOSName", // ListCloudOS 를 ListOSName 로 수정
+    ...
+  }
   ```
 
 - 함수 파라미터가 변경된 경우
@@ -892,44 +892,44 @@ Unit Test 기존 시나리오를 수정하고자 할 경우 다음을 참고한�
 
   ```
   tc = TestCases{
-  		Name:     "start vm",
-  		Instance: CcmApi,
-  		Method:   "StartVM",
-  		Args: []interface{}{
-  			`{ "ConnectionName": "mock-unit-config01", "ReqInfo": { "VMName": "vm-01", "ImageName": "mock-vmimage-01", "VPCName": "vpc-01", "SubnetName": "subnet-01", "SecurityGroupNames": [ "sg-01" ], "VMSpecName": "mock-vmspec-01", "KeyPairName": "keypair-01"} }`,
-  		},
-  		ExpectResStartsWith: `{"IId":{"NameId":"vm-01"`,
-  	}
+    Name:     "start vm",
+    Instance: CcmApi,
+    Method:   "StartVM",
+    Args: []interface{}{
+      `{ "ConnectionName": "mock-unit-config01", "ReqInfo": { "VMName": "vm-01", "ImageName": "mock-vmimage-01", "VPCName": "vpc-01", "SubnetName": "subnet-01", "SecurityGroupNames": [ "sg-01" ], "VMSpecName": "mock-vmspec-01", "KeyPairName": "keypair-01"} }`,
+    },
+    ExpectResStartsWith: `{"IId":{"NameId":"vm-01"`,
+  }
   ```
 
   StartVMByParam() 에 대해서는 시나리오 TestCase 중에 Method 필드가 "StartVMByParam" 인 것을 찾아 다음처럼 "Name": "vm-01" 을 "VMName": "vm-01" 으로 수정해주어야 한다. Args 필드는 StartVMByParam() 에서 입력으로 받는 req *VMReq 인자의 값을 설정해주는 역할을 한다. Args 필드는 interface{} 의 배열을 입력받는데 StartVMByParam() 의 인자는 req *VMReq 하나이기 때문에 VMReq structure 형태로 한 개만 설정한다.
 
   ```
   tc = TestCases{
-  		Name:     "start vm",
-  		Instance: CcmApi,
-  		Method:   "StartVMByParam",
-  		Args: []interface{}{
-  			&api.VMReq{
-  				ConnectionName: "mock-unit-config01",
-  				ReqInfo: api.VMInfo{
-  					VMName:             "vm-01", // Name 을 VMName 으로 수정
-  					ImageName:          "mock-vmimage-01",
-  					VPCName:            "vpc-01",
-  					SubnetName:         "subnet-01",
-  					SecurityGroupNames: []string{"sg-01"},
-  					VMSpecName:         "mock-vmspec-01",
-  					KeyPairName:        "keypair-01",
-  				},
-  			},
-  		},
-  		ExpectResStartsWith: `{"IId":{"NameId":"vm-01"`,
-  	}
+    Name:     "start vm",
+    Instance: CcmApi,
+    Method:   "StartVMByParam",
+    Args: []interface{}{
+      &api.VMReq{
+        ConnectionName: "mock-unit-config01",
+        ReqInfo: api.VMInfo{
+          VMName:             "vm-01", // Name 을 VMName 으로 수정
+          ImageName:          "mock-vmimage-01",
+          VPCName:            "vpc-01",
+          SubnetName:         "subnet-01",
+          SecurityGroupNames: []string{"sg-01"},
+          VMSpecName:         "mock-vmspec-01",
+          KeyPairName:        "keypair-01",
+        },
+      },
+    },
+    ExpectResStartsWith: `{"IId":{"NameId":"vm-01"`,
+  }
   ```
 
   - value 파라미터가 변경된 경우
 
-  ListVM() 함수는 connectionName 에 해당하는 모든 VM 목록을 가져오는 일을 한다. 여기에 지정한 이미지로 생성된 VM 목록을 가져오도록 파마미터 imageName 을 추가한다고 가정하자. 다음처럼 GO API 의 ListVM() / ListVMByParam() 함수 파라미터 값이 변경되게 된다. 따라서, ListVM() / ListVMByParam() 함수의 시나리오도 변경해주어야 한다.
+  ListVM() 함수는 connectionName 에 해당하는 모든 VM 목록을 가져오는 일을 한다. 여기에 지정한 이미지로 생성된 VM 목록을 가져오도록 파라미터 imageName 을 추가한다고 가정하자. 다음처럼 GO API 의 ListVM() / ListVMByParam() 함수 파라미터 값이 변경되게 된다. 따라서, ListVM() / ListVMByParam() 함수의 시나리오도 변경해주어야 한다.
 
   ```
   func (ccm *CCMApi) ListVM(doc string) (string, error) {}
@@ -940,29 +940,29 @@ Unit Test 기존 시나리오를 수정하고자 할 경우 다음을 참고한�
 
   ```
   tc = TestCases{
-  		Name:     "list vm",
-  		Instance: CcmApi,
-  		Method:   "ListVM",
-  		Args: []interface{}{
-  			`{ "ConnectionName": "mock-unit-config01", "ImageName": "cirros-0.5.1" }`, //  doc string 파마리터 값으로 설정됨
-  		},
-  		ExpectResStartsWith: `{"vm":[{"IId":{"NameId":"vm-01"`,
-  	}
+    Name:     "list vm",
+    Instance: CcmApi,
+    Method:   "ListVM",
+    Args: []interface{}{
+      `{ "ConnectionName": "mock-unit-config01", "ImageName": "cirros-0.5.1" }`, //  doc string 파마리터 값으로 설정됨
+    },
+    ExpectResStartsWith: `{"vm":[{"IId":{"NameId":"vm-01"`,
+  }
   ```
 
   ListVMByParam() 에 대해서는 시나리오 TestCase 중에 Method 필드가 "ListVMByParam" 인 것을 찾아 다음처럼 Args 필드에 "cirros-0.5.1" 를 추가해주어야 한다. Args 필드는 ListVMByParam() 에서 입력으로 받는 connectionName string, imageName string 인자의 값을 설정해주는 역할을 한다. Args 필드는 interface{} 의 배열을 입력받는데 ListVMByParam() 의 인자는 connectionName string, imageName string 두개이기 때문에 string 형태로 두개를 설정한다.
 
   ```
   tc = TestCases{
-  		Name:     "list vm",
-  		Instance: CcmApi,
-  		Method:   "ListVMByParam",
-  		Args: []interface{}{
-  			"mock-unit-config01", //  connectionName string 파마리터 값으로 설정됨
-        "cirros-0.5.1", //  imageName string 파마리터 값으로 설정됨
-  		},
-  		ExpectResStartsWith: `{"vm":[{"IId":{"NameId":"vm-01"`,
-  	}
+    Name:     "list vm",
+    Instance: CcmApi,
+    Method:   "ListVMByParam",
+    Args: []interface{}{
+      "mock-unit-config01", //  connectionName string 파마리터 값으로 설정됨
+      "cirros-0.5.1", //  imageName string 파마리터 값으로 설정됨
+    },
+    ExpectResStartsWith: `{"vm":[{"IId":{"NameId":"vm-01"`,
+  }
   ```
 
 - 함수 결과가 변경된 경우
@@ -971,9 +971,9 @@ Unit Test 기존 시나리오를 수정하고자 할 경우 다음을 참고한�
 
   ```
   tc = TestCases{
-      ...
-  		ExpectResStartsWith: "", // 공백으로 놓고 시나리오 다시 실행
-  	}
+    ...
+    ExpectResStartsWith: "", // 공백으로 놓고 시나리오 다시 실행
+  }
   ```
 
 - 함수 결과를 이용하고자 하는 경우
@@ -986,11 +986,112 @@ Unit Test 기존 시나리오를 수정하고자 할 경우 다음을 참고한�
 
 ### (3) CLI
 
-- 명령어 이름이 변경된 경우
-- 명령어 옵션이 변경된 경우
+- 명령어가 변경된 경우
+
+  다음의 TestCase 는 CLI 에서 "spider vm list --config ../conf/grpc_conf.yaml -i json -o json --cname mock-unit-config01" 명령어를 테스트하는 예제이다. CmdArgs 필드에 spider 서브 명령어 "vm list --config ../conf/grpc_conf.yaml -i json -o json --cname mock-unit-config01" 부분을 공백으로 분리하여 string 배열 형태로 입력하면 된다.
+
+  ```
+  tc = TestCases{
+    Name:                "list vm",
+    CmdArgs:             []string{"vm", "list", "--config", "../conf/grpc_conf.yaml", "-i", "json", "-o", "json", "--cname", "mock-unit-config01"},
+    ExpectResStartsWith: `{"vm":[{"IId":{"NameId":"vm-01"`,
+  }
+  ```
+
+  여기에서, "vm list" 명령어를 하나로 통합하여 "vmlist" 로 변경하고, 지정한 이미지로 생성된 VM 목록을 가져오도록 파라미터 "--image" 을 추가하여 CLI 가 변경되었다고 가정하자. 그러면, 다음처럼 명령어가 표현된다.
+
+  ```
+  spider vmlist --config ../conf/grpc_conf.yaml -i json -o json --cname mock-unit-config01 --image cirros-0.5.1
+  ```
+
+  CmdArgs 필드에 "vm list --config ../conf/grpc_conf.yaml -i json -o json --cname mock-unit-config01" 로 테스트한 시나리오를 찾아 다음처럼 CmdArgs 필드를 수정해야 한다.
+
+  ```
+  tc = TestCases{
+    Name:                "list vm",
+    CmdArgs:             []string{"vmlist", "--config", "../conf/grpc_conf.yaml", "-i", "json", "-o", "json", "--cname", "mock-unit-config01", "--image", "cirros-0.5.1"},
+    ExpectResStartsWith: `{"vm":[{"IId":{"NameId":"vm-01"`,
+  }
+  ```
+
 - 명령어 결과가 변경된 경우
+
+  REST API 처럼 ExpectResStartsWith 필드를 공백으로 놓고 테스트를 다시 실행하면 에러가 발생하고 에러 메시지에 실제 결과값을 보여준다. 출력된 실제 결과값을 복사하여 ExpectResStartsWith 필드에 적용하면 쉽게 변경할 수 있게 된다.
+
+  ```
+  tc = TestCases{
+    ...
+    ExpectResStartsWith: "", // 공백으로 놓고 시나리오 다시 실행
+  }
+  ```
+
+  - 주의 사항
+
+    명령어가 "-i yaml -o yaml" 처럼 입력 데이터를 yaml 포맷으로 받고 출력도 yaml 로 하는 것처럼, yaml 데이터를 처리할 때 yaml 포맷을 정확하게 맞추어야 한다. yaml 데이터 입력할 때 탭을 사용하거나 편집기에서 특정 명령으로 자동 포맷을 실행하여 TestCases 부분이 변경된다면 yaml 포맷에 맞지 않을 수 있다.
+
+    ```
+    tc = TestCases{
+    	Name: "create vpc",
+    	CmdArgs: []string{"vpc", "create", "--config", "../conf/grpc_conf.yaml", "-i", "yaml", "-o", "yaml", "-d", `
+    "ConnectionName": "mock-unit-config01"  // "ConnectionName" 앞에 공백이 없어야 함
+    "ReqInfo":  // "ReqInfo" 앞에 공백이 없어야 함
+      "Name": "vpc-01"  // "Name" 앞에 2개의 공백이 있어야 함
+      "IPv4_CIDR": "192.168.0.0/16"
+      "SubnetInfoList":
+        - "Name": "subnet-01"  // - 앞에 4개의 공백이 있어야 함
+          "IPv4_CIDR": "192.168.1.0/24"
+    `,
+    	},
+    	ExpectResStartsWith: `IId:
+      NameId: vpc-01`,   // "NameId" 앞에 2개의 공백이 있어야 함
+    ```
+
 - 명령어 결과를 이용하고자 하는 경우
+
+  REST API 에서 처럼 SpiderCmdTest() 함수의 리턴 결과를 받아서 이용하면 된다.
+
+  ```
+  res, err := SpiderCmdTest(t, tc)
+  ```
 
 ### (4) 런타임 함수 변경
 
-Cloud-Barista 프레임워크에는 외부 시스템과 연동되는 부분이 존재한다. 그래서, 외부 시스템과 연동되어 실행되는 시나리오를 실행할 때면, 항시 외부 시스템이 실행되는 상태를 유지해야 하는 제약사항이 존재하게 된다. 이럴 경우, 외부 시스템에 연동되는 함수를 [Go Monkey](https://github.com/bouk/monkey) 를 이용하여 시나리오가 실행할 때 함수를 사용자가 재정의 하여 외부 시스템과의 연동 부분을 가상으로 시뮬레이션 할 수 있다.
+Cloud-Barista 프레임워크에는 외부 시스템과 연동되는 부분이 존재한다. 그래서, 외부 시스템과 연동되어 실행되는 시나리오를 실행할 때면, 항시 외부 시스템이 실행되는 상태를 유지해야 하는 제약사항이 존재하게 된다. 이럴 경우, 외부 시스템에 연동되는 함수를 [Go Monkey](https://github.com/bouk/monkey) 를 이용하여 시나리오가 실행할 때 함수를 사용자가 재정의 하여 외부 시스템과의 연동 부분을 가상으로 시뮬레이션 할 수 있다. REST API / GO API / CLI 시나리오 폴더의 setup.go 파일에서 함수가 재정의 되고 있으며, 시나리오 변경으로 인한 수정이나 추가를 할 수 있다.
+
+- CB-SPIDER 의 런타임 변경 함수
+
+```
+monkey.Patch(sshrun.SSHRun, func(sshInfo sshrun.SSHInfo, cmd string) (string, error) {})
+```
+
+- CB-TUMBLEBUG 의 런타임 변경 함수
+
+```
+monkey.Patch(mcis.CheckConnectivity, func(host string, port string) error {})
+
+monkey.Patch(mcis.SSHRun, func(sshInfo mcis.SSHInfo, cmd string) (string, error) {})
+
+monkey.Patch(mcis.SSHCopy, func(sshInfo mcis.SSHInfo, sourcePath string, remotePath string) error {})
+
+monkey.Patch(mcis.CheckDragonflyEndpoint, func() error {})
+
+monkey.Patch(mcis.GetCloudLocation, func(cloudType string, nativeRegion string) mcis.GeoLocation {})
+
+monkey.Patch(mcis.CallMonitoringAsync, func(wg *sync.WaitGroup, nsID string, mcisID string, vmID string, givenUserName string, method string, cmd string,   returnResult *[]mcis.SshCmdResult) {})
+
+monkey.Patch(mcis.CallGetMonitoringAsync, func(wg *sync.WaitGroup, nsID string, mcisID string, vmID string, vmIP string, method string, metric string, cmd string, returnResult *[]mcis.MonResultSimple) {})
+
+monkey.Patch(mcis.CallMilkyway, func(wg *sync.WaitGroup, vmList []string, nsId string, mcisId string, vmId string, vmIp string, action string, option string, results *mcis.BenchmarkInfoArray) {})
+```
+
+- CB-LADYBUG 의 런타임 변경 함수
+
+```
+monkey.Patch(sshrun.SSHRun, func(sshInfo sshrun.SSHInfo, cmd string) (string, error) {})
+
+monkey.Patch(sshrun.SSHCopy, func(sshInfo sshrun.SSHInfo, sourcePath string, remotePath string) error {})
+
+monkey.Patch(service.GetCSPName, func(providerName string) (lb_conf.CSP, error) {})
+
+monkey.Patch(service.GetVmImageId, func(csp lb_conf.CSP, configName string) (string, error) {})
+```
