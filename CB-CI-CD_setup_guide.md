@@ -155,33 +155,33 @@ Backend 서버는 docker-compose 로 구성되어 있으며 backend 폴더의 do
 
 - CB-TUMBLEBUG
 
-Backend 서버로 cb-spider 이미지 0.4.7 버전을 이용하고 있다. 수정을 원할 경우 docker-compose.yaml 에서 cb-spider 이미지 버전을 변경할 수 있다.
+  Backend 서버로 cb-spider 이미지 0.4.7 버전을 이용하고 있다. 수정을 원할 경우 docker-compose.yaml 에서 cb-spider 이미지 버전을 변경할 수 있다.
 
-```
-version: "3.3"
-services:
+  ```
+  version: "3.3"
+  services:
 
-  cb-spider:
-    image: cloudbaristaorg/cb-spider:0.4.7  // 사용된 cb-spider 버전
-    container_name: cb-spider-backend
-```
+    cb-spider:
+      image: cloudbaristaorg/cb-spider:0.4.7  // 사용된 cb-spider 버전
+      container_name: cb-spider-backend
+  ```
 
 - CB-LADYBUG
 
-Backend 서버로 cb-spider 이미지 0.4.7 버전, cb-tumblebug 이미지 0.4.2 버전을 이용하고 있다. 수정을 원할 경우 docker-compose.yaml 에서 cb-spider / cb-tumblebug 이미지 버전을 변경할 수 있다.
+  Backend 서버로 cb-spider 이미지 0.4.7 버전, cb-tumblebug 이미지 0.4.2 버전을 이용하고 있다. 수정을 원할 경우 docker-compose.yaml 에서 cb-spider / cb-tumblebug 이미지 버전을 변경할 수 있다.
 
-```
-version: "3.3"
-services:
+  ```
+  version: "3.3"
+  services:
 
-  cb-spider:
-    image: cloudbaristaorg/cb-spider:0.4.7 // 사용된 cb-spider 버전
-    container_name: cb-spider-backend
+    cb-spider:
+      image: cloudbaristaorg/cb-spider:0.4.7 // 사용된 cb-spider 버전
+      container_name: cb-spider-backend
 
-  cb-tumblebug:
-    image: cloudbaristaorg/cb-tumblebug:0.4.2 // 사용된 cb-tumblebug 버전
-    container_name: cb-tumblebug-backend
-```
+    cb-tumblebug:
+      image: cloudbaristaorg/cb-tumblebug:0.4.2 // 사용된 cb-tumblebug 버전
+      container_name: cb-tumblebug-backend
+  ```
 
 ## [CI Workflow 수정]
 
