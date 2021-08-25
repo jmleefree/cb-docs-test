@@ -685,6 +685,25 @@ func TestCloudOS(t *testing.T) {
 }
 ```
 
+- 주의 사항
+
+  CB-SPIDER 에서 "RegisterCredential" 함수의 TestCase 를 생성할 때, 다음은 GivenPostData 필드의 json 데이터에서 MockName 값으로 "mock_unit_full" 이 설정 되어 있는 예를 보여주고 있다. 여기에서 MockName 값은 시나리오 마다 모두 다르게 설정해야 한다. Unit Test 는 CB-SPIDER 의 Mock Driver 를 이용하는데, Mock Driver 의 MockName 이 동일하면 Modck Driver 에서 데이터가 충돌이 발생할 수 있다.
+
+  ```
+  tc = TestCases{
+      Name:                 "register credential",
+      EchoFunc:             "RegisterCredential",
+      HttpMethod:           http.MethodPost,
+      WhenURL:              "/spider/credential",
+      GivenQueryParams:     "",
+      GivenParaNames:       nil,
+      GivenParaVals:        nil,
+      GivenPostData:        `{"CredentialName":"mock-unit-credential01","ProviderName":"MOCK", "KeyValueInfoList": [{"Key":"MockName", "Value":"mock_unit_full"}]}`,
+      ExpectStatus:         http.StatusOK,
+      ExpectBodyStartsWith: `{"CredentialName":"mock-unit-credential01"`,
+    }
+  ```
+
 ## [Unit Test 시나리오 수정]
 
 Unit Test 기존 시나리오를 수정하고자 할 경우 다음을 참고한다.
@@ -730,15 +749,15 @@ Unit Test 기존 시나리오를 수정하고자 할 경우 다음을 참고한�
   		HttpMethod:           http.MethodGet, // HTTP 메쏘드가 변경된 경우 수정
   		WhenURL:              "/spider/controlvm/:Name", // URL 이 변경된 경우 수정
   		GivenQueryParams:     "?action=reboot", // Query Parameter 가 변경된 경우 수정
-  		GivenParaNames:       []string{"Name"}, // Pass Parameter 이름이 변경된 경우 수정
-  		GivenParaVals:        []string{"vm-01"}, // Pass Parameter 값이 변경된 경우 수정
+  		GivenParaNames:       []string{"Name"}, // Path Parameter 이름이 변경된 경우 수정
+  		GivenParaVals:        []string{"vm-01"}, // Path Parameter 값이 변경된 경우 수정
   		GivenPostData:        `{ "ConnectionName": "mock-unit-config01" }`, // POST 데이터가 변경된 경우 수정
   		ExpectStatus:         http.StatusOK,
   		ExpectBodyStartsWith: `{"Status":"Rebooting"}`,
   	}
   ```
 
-  예로, Query Parameter 를 Pass Parameter 로 옮기고 HTTP 메쏘드는 POST 방식으로 변경한다고 가정하자. 즉, http://localhost:1024/spider/controlvm/vm-01/reboot URL 을 POST 방식으로 호출한다고 하면 다음과 같이 수정하면 된다.
+  예로, Query Parameter 를 Path Parameter 로 옮기고 HTTP 메쏘드는 POST 방식으로 변경한다고 가정하자. 즉, http://localhost:1024/spider/controlvm/vm-01/reboot URL 을 POST 방식으로 호출한다고 하면 다음과 같이 수정하면 된다.
 
   ```
   tc = TestCases{
@@ -822,9 +841,148 @@ Unit Test 기존 시나리오를 수정하고자 할 경우 다음을 참고한�
 ### (2) GO API
 
 - 함수 이름이 변경된 경우
+
+  다음처럼 GO API 함수 ListCloudOS 가 ListOSName 으로 변경된다고 가정하자.
+
+  ```
+  func (cim *CIMApi) ListOSName() (string, error) { // ListCloudOS 이름이 ListOSName 로 변경됨
+  }
+  ```
+
+  GO API 시나리오의 TestCase 에서 다음처럼 Method 필드에 "ListCloudOS" 로 되어 있는 함수이름을 "ListOSName" 로 수정한다. Instance 필드에 설정된 CimApi 는 setup.go 파일의 SetUpForGrpc() 함수에서 생성되어 진다.
+
+  ```
+  tc := TestCases{
+  		Name:                "list cloud os",
+  		Instance:            CimApi,
+  		Method:              "ListOSName", // ListCloudOS 를 ListOSName 로 수정
+      ...
+  	}
+  ```
+
 - 함수 파라미터가 변경된 경우
+
+  - structure 파라미터가 변경된 경우
+
+  다음처럼 VMInfo structure 에서 Name 필드가 VMName 으로 이름이 변경된다고 가정하자.
+
+  ```
+  type VMInfo struct {
+    VMName             string   `yaml:"VMName" json:"VMName"` // Name 을 VMName 으로 변경
+    ImageName          string   `yaml:"ImageName" json:"ImageName"`
+    VPCName            string   `yaml:"VPCName" json:"VPCName"`
+    SubnetName         string   `yaml:"SubnetName" json:"SubnetName"`
+    SecurityGroupNames []string `yaml:"SecurityGroupNames" json:"SecurityGroupNames"`
+    VMSpecName         string   `yaml:"VMSpecName" json:"VMSpecName"`
+    KeyPairName        string   `yaml:"KeyPairName" json:"KeyPairName"`
+
+    VMUserId     string `yaml:"VMUserId" json:"VMUserId"`
+    VMUserPasswd string `yaml:"VMUserPasswd" json:"VMUserPasswd"`
+  }
+  ```
+
+  VMInfo structure 의 변경으로 인해 다음처럼 GO API 의 StartVM() / StartVMByParam() 함수 파라미터 값이 변경되게 된다. 따라서, StartVM() / StartVMByParam() 함수의 시나리오도 값을 변경해주어야 한다.
+
+  ```
+  func (ccm *CCMApi) StartVM(doc string) (string, error) {}
+  func (ccm *CCMApi) StartVMByParam(req *VMReq) (string, error) {}
+  ```
+
+  StartVM() 에 대해서는 시나리오 TestCase 중에 Method 필드가 "StartVM" 인 것을 찾아 다음처럼 "Name": "vm-01" 을 "VMName": "vm-01" 으로 수정해주어야 한다. Args 필드는 StartVM() 에서 입력으로 받는 doc string 인자의 값을 설정해주는 역할을 한다. Args 필드는 interface{} 의 배열을 입력받는데 StartVM() 의 인자는 doc string 하나이기 때문에 string 형태로 한 개만 설정한다.
+
+  ```
+  tc = TestCases{
+  		Name:     "start vm",
+  		Instance: CcmApi,
+  		Method:   "StartVM",
+  		Args: []interface{}{
+  			`{ "ConnectionName": "mock-unit-config01", "ReqInfo": { "VMName": "vm-01", "ImageName": "mock-vmimage-01", "VPCName": "vpc-01", "SubnetName": "subnet-01", "SecurityGroupNames": [ "sg-01" ], "VMSpecName": "mock-vmspec-01", "KeyPairName": "keypair-01"} }`,
+  		},
+  		ExpectResStartsWith: `{"IId":{"NameId":"vm-01"`,
+  	}
+  ```
+
+  StartVMByParam() 에 대해서는 시나리오 TestCase 중에 Method 필드가 "StartVMByParam" 인 것을 찾아 다음처럼 "Name": "vm-01" 을 "VMName": "vm-01" 으로 수정해주어야 한다. Args 필드는 StartVMByParam() 에서 입력으로 받는 req *VMReq 인자의 값을 설정해주는 역할을 한다. Args 필드는 interface{} 의 배열을 입력받는데 StartVMByParam() 의 인자는 req *VMReq 하나이기 때문에 VMReq structure 형태로 한 개만 설정한다.
+
+  ```
+  tc = TestCases{
+  		Name:     "start vm",
+  		Instance: CcmApi,
+  		Method:   "StartVMByParam",
+  		Args: []interface{}{
+  			&api.VMReq{
+  				ConnectionName: "mock-unit-config01",
+  				ReqInfo: api.VMInfo{
+  					VMName:             "vm-01", // Name 을 VMName 으로 수정
+  					ImageName:          "mock-vmimage-01",
+  					VPCName:            "vpc-01",
+  					SubnetName:         "subnet-01",
+  					SecurityGroupNames: []string{"sg-01"},
+  					VMSpecName:         "mock-vmspec-01",
+  					KeyPairName:        "keypair-01",
+  				},
+  			},
+  		},
+  		ExpectResStartsWith: `{"IId":{"NameId":"vm-01"`,
+  	}
+  ```
+
+  - value 파라미터가 변경된 경우
+
+  ListVM() 함수는 connectionName 에 해당하는 모든 VM 목록을 가져오는 일을 한다. 여기에 지정한 이미지로 생성된 VM 목록을 가져오도록 파마미터 imageName 을 추가한다고 가정하자. 다음처럼 GO API 의 ListVM() / ListVMByParam() 함수 파라미터 값이 변경되게 된다. 따라서, ListVM() / ListVMByParam() 함수의 시나리오도 변경해주어야 한다.
+
+  ```
+  func (ccm *CCMApi) ListVM(doc string) (string, error) {}
+  func (ccm *CCMApi) ListVMByParam(connectionName string, imageName string) (string, error) {} // imageName 파라미터 추가
+  ```
+
+  ListVM() 에 대해서는 시나리오 TestCase 중에 Method 필드가 "ListVM" 인 것을 찾아 다음처럼 "ImageName": "cirros-0.5.1" 을 추가 해주어야 한다. 여기에서 "ImageName" 필드 이름은 Protobuf 에서 정의된 이름이다. Args 필드는 ListVM() 에서 입력으로 받는 doc string 인자의 값을 설정해주는 역할을 한다. Args 필드는 interface{} 의 배열을 입력받는데 ListVM() 의 인자는 doc string 하나이기 때문에 string 형태로 한 개만 설정한다.
+
+  ```
+  tc = TestCases{
+  		Name:     "list vm",
+  		Instance: CcmApi,
+  		Method:   "ListVM",
+  		Args: []interface{}{
+  			`{ "ConnectionName": "mock-unit-config01", "ImageName": "cirros-0.5.1" }`, //  doc string 파마리터 값으로 설정됨
+  		},
+  		ExpectResStartsWith: `{"vm":[{"IId":{"NameId":"vm-01"`,
+  	}
+  ```
+
+  ListVMByParam() 에 대해서는 시나리오 TestCase 중에 Method 필드가 "ListVMByParam" 인 것을 찾아 다음처럼 Args 필드에 "cirros-0.5.1" 를 추가해주어야 한다. Args 필드는 ListVMByParam() 에서 입력으로 받는 connectionName string, imageName string 인자의 값을 설정해주는 역할을 한다. Args 필드는 interface{} 의 배열을 입력받는데 ListVMByParam() 의 인자는 connectionName string, imageName string 두개이기 때문에 string 형태로 두개를 설정한다.
+
+  ```
+  tc = TestCases{
+  		Name:     "list vm",
+  		Instance: CcmApi,
+  		Method:   "ListVMByParam",
+  		Args: []interface{}{
+  			"mock-unit-config01", //  connectionName string 파마리터 값으로 설정됨
+        "cirros-0.5.1", //  imageName string 파마리터 값으로 설정됨
+  		},
+  		ExpectResStartsWith: `{"vm":[{"IId":{"NameId":"vm-01"`,
+  	}
+  ```
+
 - 함수 결과가 변경된 경우
+
+  REST API 처럼 ExpectResStartsWith 필드를 공백으로 놓고 테스트를 다시 실행하면 에러가 발생하고 에러 메시지에 실제 결과값을 보여준다. 출력된 실제 결과값을 복사하여 ExpectResStartsWith 필드에 적용하면 쉽게 변경할 수 있게 된다.
+
+  ```
+  tc = TestCases{
+      ...
+  		ExpectResStartsWith: "", // 공백으로 놓고 시나리오 다시 실행
+  	}
+  ```
+
 - 함수 결과를 이용하고자 하는 경우
+
+  REST API 에서 처럼 MethodTest() 함수의 리턴 결과를 받아서 이용하면 된다.
+
+  ```
+  res, err := MethodTest(t, tc)
+  ```
 
 ### (3) CLI
 
