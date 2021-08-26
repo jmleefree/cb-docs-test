@@ -133,7 +133,7 @@ CB-SPIDER Repository 의 .github 폴더에서 workflows 폴더를 생성한다.
 
 ### (1) Unit Test 시나리오 복사
 
-다음 그림처럼 test/interface-test 에 있는 모든 파일을 CB-SPIDER Repository 의 동일 위치에 복사한다.
+다음 그림처럼 test/interface-test 에 있는 모든 파일을 CB-SPIDER Repository 의 동일 위치에 복사한다. 그리고, interface-test 폴더에 포함된 모든 파일에서 "poc-cicd-spider" 를 검색해서 "cb-spider" 로 수정한다.
 
 <br/>
 <img src="./images/guide-unit-folder-copy.png" width="500">
