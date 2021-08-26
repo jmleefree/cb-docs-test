@@ -352,33 +352,35 @@ CB-SPIDER Repository 에서 Unit Test 시나리오는 test/interface-test 에 �
 
 - unit-test/test.env 에서 CBSPIDER_ROOT 환경변수를 다음과 같이 수정한다.
 
-```
-export CBSPIDER_ROOT=$HOME/go/src/github.com/cloud-barista/cb-spider/unit-test
-```
+  ```
+  export CBSPIDER_ROOT=$HOME/go/src/github.com/cloud-barista/cb-spider/unit-test
+  ```
 
-- unit-test/test.sh 에서 go test 의 coverpkg 옵션에서 "go list ../../..." 를 "go list ../..." 로 수정하고, "grep -v cloud-driver" 를 다음과 같이 추가한다. test/interface-test 일 때는 cb-spider ROOT 까지 상대 경로로 ../../ 를 해야 하지만, unit-test 일 때는 ROOT 까지 ../ 를 하면 되게 된다.
+- unit-test 폴더 아래에 있는 \*.go 파일에서 "github.com/cloud-barista/cb-spider/test/interface-test" 가 포함되어 있는 import 경로를 찾아서 "github.com/cloud-barista/cb-spider/unit-test" 로 수정한다.
 
-```
-go test -p 1  -v -coverpkg=$(go list ../... | grep -v interface-test  | grep -v protobuf | grep -v cloud-driver | tr "\n" ",")  -coverprofile=profile.cov ./...
-```
+- unit-test/test.sh 에서 go test 의 coverpkg 옵션에서 "go list ../../..." 를 "go list ../..." 로 수정하고, "grep -v cloud-driver" 를 다음과 같이 추가한다. "grep -v interface-test" 는 "grep -v unit-test" 로 수정한다. test/interface-test 일 때는 cb-spider ROOT 까지 상대 경로로 ../../ 를 해야 하지만, unit-test 일 때는 ROOT 까지 ../ 를 하면 되게 된다.
+
+  ```
+  go test -p 1  -v -coverpkg=$(go list ../... | grep -v unit-test  | grep -v protobuf | grep -v cloud-driver | tr "\n" ",")  -coverprofile=profile.cov ./...
+  ```
 
 - .github/workflows/cb-ci-actions.yaml 에서 "Run Coverage" Step 을 다음과 같이 수정한다. go test 의 coverpkg 옵션에서 "go list ../../..." 를 "go list ../..." 로 수정하고, "grep -v cloud-driver" 를 추가한다. "../../outputs" 경로는 "../outputs" 로 수정한다.
 
-```
-- name: Run Coverage
-  env:
-    CBSPIDER_ROOT: ${{ github.workspace }}/unit-test // 경로 수정
-    CBSTORE_ROOT: ${{ github.workspace }}/unit-test // 경로 수정
-    CBLOG_ROOT: ${{ github.workspace }}/unit-test // 경로 수정
-    LOCALHOST: OFF
-    PLUGIN_SW: OFF
-    MEERKAT: OFF
-  run: |
-    cd ${{ github.workspace }}/unit-test  // 경로 수정
-    (go test -p 1 -v -coverpkg=$(go list ../... | grep -v interface-test | grep -v protobuf | grep -v cloud-driver | tr "\n" ",")  -coverprofile=../outputs/coverage.txt ./... > ../outputs/coverage.log 2>&1; echo $? > ../outputs/coverage.check ) || true // go list 경로와 outputs 경로 수정, grep -v cloud-driver 추가
+  ```
+  - name: Run Coverage
+    env:
+      CBSPIDER_ROOT: ${{ github.workspace }}/unit-test // 경로 수정
+      CBSTORE_ROOT: ${{ github.workspace }}/unit-test // 경로 수정
+      CBLOG_ROOT: ${{ github.workspace }}/unit-test // 경로 수정
+      LOCALHOST: OFF
+      PLUGIN_SW: OFF
+      MEERKAT: OFF
+    run: |
+      cd ${{ github.workspace }}/unit-test  // 경로 수정
+      (go test -p 1 -v -coverpkg=$(go list ../... | grep -v unit-test | grep -v protobuf | grep -v cloud-driver | tr "\n" ",")  -coverprofile=../outputs/coverage.txt ./... > ../outputs/coverage.log 2>&1; echo $? > ../outputs/coverage.check ) || true // go list 경로와 outputs 경로 수정, grep -v cloud-driver 추가, grep -v interface-test 에서 grep -v unit-test 로 수정
 
-    cd ${{ github.workspace }}
-```
+      cd ${{ github.workspace }}
+  ```
 
 ### (4) go build 버전 추가
 
@@ -386,16 +388,16 @@ golang build 테스트는 현재 1.16 버전 하나만 수행하고 있다. 만�
 
 - CB-CI-GOBUILD-MATRIX-JOB 에서 matrix 의 go 필드에 1.17 golang 버전을 다음과 같이 수정한다.
 
-```
-cb-ci-gobuild-matrix-job:
-  name: CB-CI-GOBUILD-MATRIX-JOB
-  if: ${{ github.repository_owner == 'cloud-barista' }}
-  runs-on: ubuntu-latest
-  needs: [cb-env-job]
-  strategy:
-    matrix:
-      go: ["1.16", "1.17"] // 1.17 버전 추가
-```
+  ```
+  cb-ci-gobuild-matrix-job:
+    name: CB-CI-GOBUILD-MATRIX-JOB
+    if: ${{ github.repository_owner == 'cloud-barista' }}
+    runs-on: ubuntu-latest
+    needs: [cb-env-job]
+    strategy:
+      matrix:
+        go: ["1.16", "1.17"] // 1.17 버전 추가
+  ```
 
 ## [CD Workflow 수정]
 
